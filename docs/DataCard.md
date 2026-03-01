@@ -14,8 +14,8 @@ Amazon ESCI (Shopping Queries Dataset) provides query–product pairs labeled:
 ## Label → grade mapping (for graded metrics)
 Used for nDCG (graded gains):
 - E = 1.0
-- S = 0.7
-- C = 0.3
+- S = 0.1
+- C = 0.01
 - I = 0.0
 
 Rationale:
@@ -24,7 +24,7 @@ Rationale:
 
 ## Text fields
 ### Dense field
-`product_text_dense` = title + brand + bullet points + optional color 
+`product_text_dense` = title + brand + bullet points
 
 Why:
 - Captures identifiers + attributes

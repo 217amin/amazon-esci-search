@@ -34,6 +34,6 @@ Why Matryoshka:
 - Option B: **E+S** positives (closer to real shopping relevance)
 
 ## Cross‑encoder reranker
-- Model: `cross-encoder/ms-marco-TinyBERT-L-2-v2`
+- Model: `mixedbread-ai/mxbai-rerank-base-v1`
 - Used for top‑K candidates per query
 - Improves precision and nDCG at small K
