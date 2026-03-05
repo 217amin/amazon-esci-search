@@ -16,12 +16,12 @@ def encode_systemA(pair_df: pd.DataFrame, cfg: dict, model_override: str = None)
         # If fine-tuned model exists, use it. Else use base model.
         model_path = str(ft_path) if ft_path.exists() else cfg["biencoder_model"]
     
-    print(f"🚀 Encoding with System A model: {model_path}")
+    print(f" Encoding with System A model: {model_path}")
     model = SentenceTransformer(model_path, trust_remote_code=True)
     
     # --- Force Sequence Length ---
     target_seq_len = cfg.get("matryoshka", {}).get("max_seq_length", 128)
-    print(f"📏 Max Seq Length: {target_seq_len}")
+    print(f" Max Seq Length: {target_seq_len}")
     model.max_seq_length = int(target_seq_len)
     
     # 1. ENCODE PRODUCTS (Standardize Order)
