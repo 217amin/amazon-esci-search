@@ -55,7 +55,7 @@ def build_candidates(
         P = P / np.maximum(np.linalg.norm(P, axis=1, keepdims=True), 1e-10)
         Q = Q / np.maximum(np.linalg.norm(Q, axis=1, keepdims=True), 1e-10)
         
-        print(f"⚡ Using FAISS (Dim={target_dim})")
+        print(f" Using FAISS (Dim={target_dim})")
         index = build_faiss_index(P)
 
     # B. Sparse Retrieval Strategy
@@ -77,7 +77,7 @@ def build_candidates(
         if not prebuilt_bm25:
             print("⚡ Building BM25 Index on the fly (using Product Titles)...")
             
-            # 🟢 FIXED: Added .astype(str) to prevent crashes on numeric titles
+            #  Added .astype(str) to prevent crashes on numeric titles
             bm25.build_index(
                 texts=prod_df["product_title"].fillna("").astype(str).tolist(), 
                 pids=prod_df["product_id"].tolist()
@@ -131,8 +131,7 @@ def build_candidates(
         if bm25:
             w = weights["bm25"]
             
-            # 🟢 FIXED: Explicitly use q_raw (raw query text)
-            # This works perfectly with BM25Fast's internal CountVectorizer
+            # Explicitly use q_raw (raw query text)
             b_res = bm25.search(q_raw[qid], top_k=sparse_k)
             
             for rank, (pid, _) in enumerate(b_res):
@@ -164,12 +163,10 @@ def rerank_candidates(
 ) -> Tuple[pd.DataFrame, float]:
     """
     Cross-Encoder Reranking.
-    Optimization: Uses 'TinyBERT' or 'MiniLM' to re-score top candidates.
-    Hardware Note: Batch Size 2048 is optimized for RTX 4070 (8GB VRAM) with TinyBERT.
     """
     device = "cuda" if torch.cuda.is_available() else "cpu"
     max_length = cfg["reranker"]["max_seq_length"]
-    print(f"🚀 Loading Cross-Encoder: {model_name} on {device.upper()}... and Max length: {max_length}")
+    print(f" Loading Cross-Encoder: {model_name} on {device.upper()}... and Max length: {max_length}")
     
     ce = CrossEncoder(model_name, device=device, max_length=max_length)
     
@@ -185,7 +182,7 @@ def rerank_candidates(
     print(f"    -> Reranking {len(pairs)} pairs...")
     start_time = time.time()
     
-    # Stability Fix: num_workers=0 prevents deadlocks on Windows/WSL
+    # num_workers=0 prevents deadlocks on Windows/WSL
     scores = ce.predict(
         pairs, 
         batch_size=batch_size, 

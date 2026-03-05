@@ -32,7 +32,7 @@ def ndcg_at_k(ranked_gains: List[float], k: int) -> float:
 def compute_recall_metrics(df: pd.DataFrame, q_rels: Dict[str, List[float]], ks=[50, 100, 200]) -> Dict[str, float]:
     """
     Computes Recall@K. 
-    Engineering Note: Uses 'broad' relevance (E+S) by default, as Recall is about coverage.
+    We Use 'broad' relevance (E+S) by default, as Recall is about coverage.
     """
     recall_per_k = {k: [] for k in ks}
 
@@ -63,7 +63,7 @@ def compute_recall_metrics(df: pd.DataFrame, q_rels: Dict[str, List[float]], ks=
 def compute_ndcg_metrics(df: pd.DataFrame, q_rels: Dict[str, List[float]], ks=[10, 20, 50]) -> Dict[str, float]:
     """
     Computes nDCG@K.
-    Engineering Note: Uses 'graded' relevance (1.0, 0.1, 0.01) to reward exact ordering.
+    We Use 'graded' relevance (1.0, 0.1, 0.01) to reward exact ordering.
     """
     ndcg_per_k = {k: [] for k in ks}
 

@@ -31,9 +31,9 @@ def train_matryoshka(pair_df: pd.DataFrame, cfg: Dict[str, Any]):
     m_params = cfg["matryoshka"]
     output_dir = str(Path(cfg["paths"]["matryoshka_dir"]) / "us")
     
-    print(f"🚀 Loading Backbone: {model_name}")
-    print(f"⚙️  Config: Batch={m_params['batch_size']} | Epochs={m_params['epochs']} | LR={m_params['lr']}")
-    print(f"📏 Max Seq Length: {m_params['max_seq_length']}")
+    print(f" Loading Backbone: {model_name}")
+    print(f" Config: Batch={m_params['batch_size']} | Epochs={m_params['epochs']} | LR={m_params['lr']}")
+    print(f" Max Seq Length: {m_params['max_seq_length']}")
     model = SentenceTransformer(model_name)
     model.max_seq_length = int(m_params['max_seq_length']) 
     

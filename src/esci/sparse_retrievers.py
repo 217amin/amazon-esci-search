@@ -42,7 +42,7 @@ class SPLADEFast:
         return values
 
     def build_index(self, texts: List[str], pids: List[str]):
-        print(f"🏗️ Building Fast SPLADE index for {len(texts)} docs...")
+        print(f" Building Fast SPLADE index for {len(texts)} docs...")
         self.pid_list = pids
 
         all_rows, all_cols, all_vals = [], [], []
@@ -63,7 +63,7 @@ class SPLADEFast:
 
         if not all_rows:
             self.doc_matrix = None
-            print("⚠️ SPLADE index: no non-zero entries found.")
+            print(" SPLADE index: no non-zero entries found.")
             return
 
         rows = torch.cat(all_rows)
@@ -76,7 +76,7 @@ class SPLADEFast:
             (len(texts), self.vocab_size)
         ).to_sparse_csr().to(self.device)
 
-        print("✅ SPLADE index built. Matrix shape:", tuple(self.doc_matrix.shape))
+        print(" SPLADE index built. Matrix shape:", tuple(self.doc_matrix.shape))
 
     def score_topk(self, query: str, top_k: int = 500) -> List[Tuple[int, float]]:
         if self.doc_matrix is None:
@@ -93,10 +93,7 @@ class SPLADEFast:
 class BM25Fast:
     """
     GPU-Accelerated BM25 implemented as CSR(doc_term_bm25_weights) @ query_tf_vector.
-
-    Design intent:
-    - "Dumb" lexical recall baseline (stems, classic IR behavior)
-    - Should improve recall coverage, not necessarily precision
+    Uses CountVectorizer for tokenization + stemming, then applies BM25 weighting.
     """
     def __init__(self, k1: float = 1.5, b: float = 0.75, device: Optional[str] = None, min_df: int = 1):
         self.k1 = k1
@@ -111,20 +108,20 @@ class BM25Fast:
         self.stemmer = PorterStemmer()
 
     def _stem_tokenize(self, text: str) -> List[str]:
-        # Normalize first (same function you use for sparse), then tokenize + stem
+        # Normalize first, then tokenize + stem
         text = normalize_sparse_text(str(text))
         words = re.findall(r"(?u)\b\w+\b", text)
         return [self.stemmer.stem(w) for w in words]
 
     def build_index(self, texts: List[str], pids: List[str]):
-        print(f"🏗️ Building Fast GPU BM25 Index (stemming + normalize) for {len(texts)} docs...")
+        print(f" Building Fast GPU BM25 Index (stemming + normalize) for {len(texts)} docs...")
         self.pids = pids
 
         # Custom tokenizer => token_pattern must be None
         self.vectorizer = CountVectorizer(
             tokenizer=self._stem_tokenize,
             token_pattern=None,
-            lowercase=False,   # we already normalize+lowercase ourselves
+            lowercase=False,   # we already normalize+lowercase ourselves in data.py
             min_df=self.min_df
         )
 
@@ -159,14 +156,14 @@ class BM25Fast:
             (n_docs, len(self.vectorizer.vocabulary_))
         ).to_sparse_csr().to(self.device)
 
-        print("✅ BM25 index built. Matrix shape:", tuple(self.doc_matrix.shape))
-        print("✅ BM25 vocab size:", len(self.vectorizer.vocabulary_))
+        print(" BM25 index built. Matrix shape:", tuple(self.doc_matrix.shape))
+        print(" BM25 vocab size:", len(self.vectorizer.vocabulary_))
 
     def search(self, query: str, top_k: int = 500) -> List[Tuple[str, float]]:
         if self.doc_matrix is None or self.vectorizer is None:
             return []
 
-        # IMPORTANT: CountVectorizer will call our tokenizer (normalize+stem)
+        # CountVectorizer will call our tokenizer (normalize+stem)
         q_sparse = self.vectorizer.transform([str(query)])
 
         # If query contains no in-vocab tokens, BM25 contributes nothing.
@@ -176,7 +173,7 @@ class BM25Fast:
         q_indices = torch.from_numpy(q_sparse.indices).long().to(self.device)
         q_values = torch.from_numpy(q_sparse.data.astype(np.float32)).float().to(self.device)
 
-        # Build query vector in vocab space (dense is fine; vocab dim is manageable)
+        # Build query vector in vocab space (only non-zero entries)
         q_vec = torch.zeros(self.doc_matrix.shape[1], device=self.device, dtype=torch.float32)
         q_vec.index_add_(0, q_indices, q_values)
 

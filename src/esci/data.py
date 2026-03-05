@@ -14,14 +14,14 @@ def sample_dataset(df: pd.DataFrame, cfg: Dict[str, Any]) -> pd.DataFrame:
         return df
 
     n = cfg["debug"]["sample_size"]
-    print(f"\n⚠️ DEBUG MODE: Sampling {n} queries...")
+    print(f"\n DEBUG MODE: Sampling {n} queries...")
     
     unique_qids = df["query_id"].unique()
     if len(unique_qids) > n:
         selected_qids = np.random.choice(unique_qids, size=n, replace=False)
         df = df[df["query_id"].isin(selected_qids)].reset_index(drop=True)
     
-    print(f"⚠️ DEBUG MODE: New shape: {df.shape}")
+    print(f" DEBUG MODE: New shape: {df.shape}")
     return df
 
 LABEL2GRADE = {"E": 1.0, "S": 0.1, "C": 0.01, "I": 0.0}
@@ -59,7 +59,7 @@ def remove_train_test_overlap(df: pd.DataFrame) -> pd.DataFrame:
         .merge(df_test[["query_id", "product_locale"]], on=["query_id", "product_locale"], how="inner")["query_id"]
         .unique()
     )
-    print(f"🌐 Overlapping queries between train and test: {len(overlap_qids):,}")
+    print(f" Overlapping queries between train and test: {len(overlap_qids):,}")
     df_clean = df[~((df["split"] == "train") & (df["query_id"].isin(overlap_qids)))]
     print(
         f"After removing overlap: train queries = {df_clean[df_clean['split']=='train']['query_id'].nunique():,}, "
