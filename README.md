@@ -40,8 +40,9 @@ The key engineering addition is **Matryoshka fine-tuning**, enabling strong retr
 
 This project uses the Amazon Shopping Queries Dataset (ESCI), which provides difficult, real-world search queries alongside human-annotated relevance judgments.
 Link to download the DataSet(Put both of the files under data/raw): 
-[shopping_queries_dataset_examples.parquet](https://github.com/amazon-science/esci-data/blob/main/shopping_queries_dataset/shopping_queries_dataset_examples.parquet)
-[shopping_queries_dataset_products.parquet](https://github.com/amazon-science/esci-data/blob/main/shopping_queries_dataset/shopping_queries_dataset_products.parquet)
+- [shopping_queries_dataset_examples.parquet](https://github.com/amazon-science/esci-data/blob/main/shopping_queries_dataset/shopping_queries_dataset_examples.parquet)
+
+- [shopping_queries_dataset_products.parquet](https://github.com/amazon-science/esci-data/blob/main/shopping_queries_dataset/shopping_queries_dataset_products.parquet)
 
 The relevance of a product to a query is graded on a 4-point categorical scale:
 
