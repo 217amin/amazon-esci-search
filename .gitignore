@@ -7,3 +7,7 @@ __pycache__/
 .ipynb_checkpoints/
 *.parquet
 *.npy
+
+# EXCEPT for these files
+!data/raw/shopping_queries_dataset_examples.parquet
+!data/raw/shopping_queries_dataset_products.parquet

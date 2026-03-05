@@ -38,7 +38,7 @@ The key engineering addition is **Matryoshka fine-tuning**, enabling strong retr
 
 ## 📦 Dataset & Problem Formulation (ESCI)
 
-This project uses the Amazon Shopping Queries Dataset (ESCI), which provides difficult, real-world search queries alongside human-annotated relevance judgments.
+This project uses the Amazon Shopping Queries Dataset (ESCI), which provides difficult, real-world search queries alongside human-annotated relevance judgments(DataSet is included in data/raw FOLDER.
 
 The relevance of a product to a query is graded on a 4-point categorical scale:
 
