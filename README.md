@@ -1,11 +1,11 @@
-# 🛒 Amazon ESCI Search — Hybrid Retrieval (Dense + SPLADE + BM25) + Matryoshka Embeddings 
+# Amazon ESCI Search — Hybrid Retrieval (Dense + SPLADE + BM25) + Matryoshka Embeddings 
 ![Python](https://img.shields.io/badge/Python-3.10%2B-blue)
 ![SentenceTransformers](https://img.shields.io/badge/SentenceTransformers-IR%2FNLP-orange)
 ![FAISS](https://img.shields.io/badge/FAISS-Vector%20Search-brightgreen)
 ![Status](https://img.shields.io/badge/Status-Complete-brightgreen)
 ![License](https://img.shields.io/badge/License-MIT-lightgrey)
 
-## 🚀 Project Summary
+## Project Summary
 
 **Goal:** Retrieve the most relevant Amazon products for a shopping query (ESCI).  
 **Approach:** Two-stage search (Candidate Gen + Rerank) with **Hybrid Retrieval** (Dense + Sparse) + **Matryoshka** (strong low-dim embeddings).  
@@ -13,7 +13,7 @@
 
 ---
 
-## 📌 Project Overview
+## Project Overview
 
 This project builds an **industry-style search/relevance pipeline** on the Amazon ESCI dataset:
 
@@ -27,7 +27,7 @@ The key engineering addition is **Matryoshka fine-tuning**, enabling strong retr
 
 ---
 
-## 🎯 Objectives
+## Objectives
 
 - Implement a **hybrid retrieval** stack (dense + lexical + learned sparse)
 - Fine-tune a **Matryoshka bi-encoder** for multi-dim serving (768→64)
@@ -36,9 +36,12 @@ The key engineering addition is **Matryoshka fine-tuning**, enabling strong retr
 
 ---
 
-## 📦 Dataset & Problem Formulation (ESCI)
+## Dataset & Problem Formulation (ESCI)
 
-This project uses the Amazon Shopping Queries Dataset (ESCI), which provides difficult, real-world search queries alongside human-annotated relevance judgments(DataSet is included in data/raw FOLDER.
+This project uses the Amazon Shopping Queries Dataset (ESCI), which provides difficult, real-world search queries alongside human-annotated relevance judgments.
+Link to download the DataSet(Put both of the files under data/raw): 
+[shopping_queries_dataset_examples.parquet](https://github.com/amazon-science/esci-data/blob/main/shopping_queries_dataset/shopping_queries_dataset_examples.parquet)
+[shopping_queries_dataset_products.parquet](https://github.com/amazon-science/esci-data/blob/main/shopping_queries_dataset/shopping_queries_dataset_products.parquet)
 
 The relevance of a product to a query is graded on a 4-point categorical scale:
 
@@ -47,7 +50,7 @@ The relevance of a product to a query is graded on a 4-point categorical scale:
 - **C (Complement)**: A product that is often bought with the requested item, but does not fulfill the primary intent.
 - **I (Irrelevant)**: The product has no relevance to the query.
 
-### ✅ Why use E and S as Positives in Retrieval?
+### Why use E and S as Positives in Retrieval?
 
 During the Candidate Generation (Retrieval) phase, we treat both Exact (E) and Substitute (S) items as "positives" for bi-encoder training and Recall evaluation.
 
@@ -55,7 +58,7 @@ The primary job of Stage 1 retrieval is to **Maximize the Coverage (Recall)**. I
 
 **Pipeline**: By training the Bi-encoder (Stage 1) to retrieve both E and S, we prevent the model from aggressively filtering out valid alternatives. We then rely on the Cross-Encoder Reranker (Stage 2) to better sort this broad pool.
 
-### 📝 Feature Engineering for Retrieval
+### Feature Engineering for Retrieval
 
 To optimize the strengths of different retrieval methods, we split the text representations:
 * **`product_text_dense` (Dense and SPLADE):** Fed the comprehensive text (Title + Brand + Bullets). These models excel at semantic understanding, capturing synonyms and nuanced context from the entire product profile.
@@ -63,7 +66,7 @@ To optimize the strengths of different retrieval methods, we split the text repr
 
 ---
 
-## 🧱 Architecture
+## Architecture
 
 ```text
 Raw ESCI Dataset
@@ -88,7 +91,7 @@ Evaluation (Recall@200 | nDCG@20 | QPS)
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 ```text
 configs/
@@ -114,7 +117,7 @@ notebooks/
 
 ---
 
-## 🧠 Modeling Choices
+## Modeling Choices
 
 ### ✅ Why Hybrid Retrieval (Dense + Sparse)?
 
@@ -143,7 +146,7 @@ MNRL is a strong SOTA baseline for bi-encoder retrieval:
 
 ---
 
-## 📊 Results (Best Recall@200 | nDCG@20)
+## Results (Best Recall@200 | nDCG@20)
 
 ### ✅ Baseline BGE embeddings (768 dim)
 
@@ -163,7 +166,7 @@ MNRL is a strong SOTA baseline for bi-encoder retrieval:
 | Dense + SPLADE | 768 | 0.8195 | 0.4997 |
 | Dense + BM25  + SPLADE | 768 | **0.8196** | **0.5167** |
 
-### ⭐ What Matryoshka is best at 64 dimensions 
+### What Matryoshka is best at 64 dimensions 
 
 At **64 dimensions** (the real Matryoshka target), dense-only and hybrid improve strongly vs baseline:
 
@@ -183,14 +186,14 @@ And after **7 Experiments** [MLFlow results](https://dagshub.com/aminlasri/Amazo
 
 **Interpretation:** Matryoshka enables **compressed vectors** (64-dim) while boosting the retrieval which is a direct win for **performance/cost**.
 
-### 📉 The Power of Matryoshka: Finetuned@64 vs. Baseline@64
+### The Power of Matryoshka: Finetuned@64 vs. Baseline@64
 
 The results show that the Finetuned Matryoshka model successfully outperformed the Baseline model at 64 dimensions, jumping from a Dense-Only Recall@200 of **0.42** to **0.74** (and up to **0.81** in the Hybrid setup).
 
 * **The Baseline Failure:** Standard embedding models distribute meaning evenly across all 768 dimensions. Arbitrarily truncating them to 64 dimensions destroys the representation, leading to a catastrophic recall collapse (0.42).
 * **The MNRL Key:** The success of this fine-tuning was driven by the combination of Matryoshka architecture and Multiple Negatives Ranking Loss (MNRL). Matryoshka explicitly forces the most critical semantic information into the earliest dimensions, while MNRL maximizes hardware utilization to quickly learn high-fidelity discriminative representations.
 
-### 📈 Hardware Efficiency & The Path to SOTA
+### Hardware Efficiency & The Path to SOTA
 
 By engineering a robust pipeline and using highly efficient "base" models—`BAAI/bge-base-en-v1.5` for retrieval and `mixedbread-ai/mxbai-rerank-base-v1` for reranking—the system achieves excellent e-commerce metrics: **Recall@200 of 81.25%** and an **nDCG@20 of 53.95%** entirely on consumer-grade hardware (8GB RTX 4070).
 
@@ -202,7 +205,7 @@ With access to enterprise compute (e.g., A100s), these metrics can be aggressive
 
 ---
 
-## ⚡ Quickstart
+## Quickstart
 
 1. **Install**
 
@@ -230,7 +233,7 @@ Encode products + queries and save embeddings:
 
 ---
 
-## 🚀 Future Improvements
+## Future Improvements
 
 * **Hard negative mining** (BM25/SPLADE/dense mined near-misses) for stronger discrimination
 * ANN indexes (FAISS IVF/HNSW) for scalability beyond flat search
@@ -239,7 +242,7 @@ Encode products + queries and save embeddings:
 
 ---
 
-## 🧠 Skills
+## Skills
 
 * Information Retrieval (bi-encoder, cross-encoder, hybrid retrieval)
 * Contrastive learning (MNRL) + Matryoshka compression
