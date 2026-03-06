@@ -27,7 +27,7 @@ matryoshka:
   max_seq_length: 256
   
 reranker:
-  max_seq_length: 256
+  max_seq_length: 128
   
 retrieval:
   sources: ["dense", "bm25", "splade"]

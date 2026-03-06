@@ -52,7 +52,7 @@ def train_matryoshka(pair_df: pd.DataFrame, cfg: Dict[str, Any]):
     # While E-only is higher precision, E+S helps the model learn broader semantic associations.
     train_df = pair_df[
         (pair_df["split"] == "train") & 
-        (pair_df["esci_label"].isin(["E", "S"])) # Use .isin(["E"]) for stricter precision
+        (pair_df["esci_label"].isin(["E", "S"])) 
     ].copy()
     
     # Formatting for MNRL: Needs (Anchor, Positive) pairs only.
@@ -66,9 +66,9 @@ def train_matryoshka(pair_df: pd.DataFrame, cfg: Dict[str, Any]):
         num_train_epochs=int(m_params["epochs"]),
         per_device_train_batch_size=int(m_params["batch_size"]),
         learning_rate=float(m_params["lr"]),
-        warmup_steps=0.1,
+        warmup_ratio=0.1,
         fp16=torch.cuda.is_available(), # Auto-detect mixed precision
-        gradient_checkpointing=True,    # Crucial for 8GB VRAM
+        gradient_checkpointing=True,    
         batch_sampler=BatchSamplers.NO_DUPLICATES,
         eval_strategy="no", 
         save_strategy="steps",

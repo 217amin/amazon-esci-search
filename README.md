@@ -153,19 +153,19 @@ MNRL is a strong SOTA baseline for bi-encoder retrieval:
 
 | Strategy | Dim | Recall@200 | nDCG@20 |
 | --- | --- | --- | --- |
-| Dense Only | 768 | 0.7398 | 0.4630 |
-| Dense + BM25 | 768 | 0.7566 | 0.4786 |
-| Dense + SPLADE | 768 | 0.7643 | 0.4872 |
-| Dense + BM25  + SPLADE | 768 | **0.7744** | **0.4960** |
+| Dense Only | 768 | 0.7398 | 0.4631 |
+| Dense + BM25 | 768 | 0.7629 | 0.4811 |
+| Dense + SPLADE | 768 | 0.7727 | 0.4943 |
+| Dense + BM25  + SPLADE | 768 | **0.7805** | **0.5030** |
 
 ### ✅ Matryoshka Fine-tuned (768 dim)
 
 | Strategy | Dim | Recall@200 | nDCG@20 |
 | --- | --- | --- | --- |
-| Dense Only | 768 | 0.7768 | 0.4509 |
-| Dense + BM25 | 768 | 0.8089 | 0.4752 |
-| Dense + SPLADE | 768 | 0.8195 | 0.4997 |
-| Dense + BM25  + SPLADE | 768 | **0.8196** | **0.5167** |
+| Dense Only | 768 | 0.7771 | 0.4512 |
+| Dense + BM25 | 768 | 0.8054 | 0.4720 |
+| Dense + SPLADE | 768 | 0.8199 | 0.4930 |
+| Dense + BM25  + SPLADE | 768 | **0.8240** | **0.5034** |
 
 ### What Matryoshka is best at 64 dimensions 
 
@@ -173,17 +173,17 @@ At **64 dimensions** (the real Matryoshka target), dense-only and hybrid improve
 
 | Strategy @64 dim | Baseline Recall@200 | Matryoshka Recall@200 | Baseline nDCG@20 | Matryoshka nDCG@20 |
 | --- | --- | --- | --- | --- |
-| Dense Only | 0.4270 | **0.7392** | 0.2492 | **0.4505** |
-| Dense + BM25 | 0.4840 | **0.7919** | 0.2998 | **0.4331** |
-| Dense + SPLADE | 0.5722 | **0.8077** | 0.3217 | **0.4785** |
-| Dense+BM25+SPLADE | 0.6507 | **0.8107** | 0.3497 | **0.5071** |
+| Dense Only | 0.4270 | **0.7394** | 0.2492 | **0.4512** |
+| Dense + BM25 | 0.5574 | **0.7826** | 0.3153 | **0.4409** |
+| Dense + SPLADE | 0.6600 | **0.8061** | 0.3503 | **0.4661** |
+| Dense+BM25+SPLADE | 0.7005 | **0.8126** | 0.3895 | **0.4843** |
 
 And after **7 Experiments** [MLFlow results](https://dagshub.com/aminlasri/Amazon-ESCI-Project.mlflow/#/experiments) with different weights for BM25 and SPLADE at 64-dim Matryoshka Embedding to choose the best retrieval model (at Recalll@200), these are the final results.
 
 | Strategy @64 dim | Recall@200 | nDCG@20 | QPS |
 | --- | --- | --- | --- |
-| Retrieval | **0.8125** | 0.4846 | 70.51 |
-| Reranker | --- | **0.5395** | 5.76 |
+| Retrieval | **0.8126** | 0.4843 | 71.91 |
+| Reranker | --- | **0.5371** | 5.74 |
 
 **Interpretation:** Matryoshka enables **compressed vectors** (64-dim) while boosting the retrieval which is a direct win for **performance/cost**.
 
@@ -196,7 +196,7 @@ The results show that the Finetuned Matryoshka model successfully outperformed t
 
 ### Hardware Efficiency & The Path to SOTA
 
-By engineering a robust pipeline and using highly efficient "base" models—`BAAI/bge-base-en-v1.5` for retrieval and `mixedbread-ai/mxbai-rerank-base-v1` for reranking—the system achieves excellent e-commerce metrics: **Recall@200 of 81.25%** and an **nDCG@20 of 53.95%** entirely on consumer-grade hardware (8GB RTX 4070).
+By engineering a robust pipeline and using highly efficient "base" models—`BAAI/bge-base-en-v1.5` for retrieval and `mixedbread-ai/mxbai-rerank-base-v1` for reranking—the system achieves excellent e-commerce metrics: **Recall@200 of 81.26%** and an **nDCG@20 of 53.71%** entirely on consumer-grade hardware (8GB RTX 4070).
 
 With access to enterprise compute (e.g., A100s), these metrics can be aggressively pushed higher by:
 
