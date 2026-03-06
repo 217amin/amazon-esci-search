@@ -178,7 +178,7 @@ At **64 dimensions** (the real Matryoshka target), dense-only and hybrid improve
 | Dense + SPLADE | 0.6600 | **0.8061** | 0.3503 | **0.4661** |
 | Dense+BM25+SPLADE | 0.7005 | **0.8126** | 0.3895 | **0.4843** |
 
-And after **7 Experiments** [MLFlow results](https://dagshub.com/aminlasri/Amazon-ESCI-Project.mlflow/#/experiments) with different weights for BM25 and SPLADE at 64-dim Matryoshka Embedding to choose the best retrieval model (at Recalll@200), these are the final results.
+And after **7 Experiments** [MLFlow results](https://dagshub.com/aminlasri/Amazon-ESCI-MATRYOSHKA-Project.mlflow/#/experiments) with different weights for BM25 and SPLADE at 64-dim Matryoshka Embedding to choose the best retrieval model (at Recalll@200), these are the final results.
 
 | Strategy @64 dim | Recall@200 | nDCG@20 | QPS |
 | --- | --- | --- | --- |
