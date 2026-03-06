@@ -250,7 +250,3 @@ Encode products + queries and save embeddings:
 * FAISS vector search + sparse indexing (BM25, SPLADE)
 * Offline/online separation, artifact management, reproducible evaluation
 * Production thinking: latency/QPS, memory footprint, monitoring plan
-
-```
-
-```
