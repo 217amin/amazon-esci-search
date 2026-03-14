@@ -112,7 +112,8 @@ notebooks/
   ├── 01_Preprocessing.ipynb
   ├── 02_Baseline.ipynb
   ├── 03_Matryoshka_Finetuning.ipynb
-  └── 04_Reranking.ipynb
+  ├── 04_Reranking.ipynb
+  └── 05_Interactive_Query_Testing
 
 ```
 
