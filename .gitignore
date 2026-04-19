@@ -1,0 +1,9 @@
+data/
+artifacts/
+models/
+mlruns/
+__pycache__/
+.ipynb_checkpoints/
+*.parquet
+*.npy
+*.db
