@@ -1,9 +1,9 @@
-# Core Data & Compute
+# Data & Compute
 pandas>=1.5.0
 numpy>=1.21.0
 pyarrow>=10.0.0          # For reading/writing .parquet files
 
-# Deep Learning & NLP
+# Deep Learning
 torch>=2.0.0
 sentence-transformers>=2.2.2
 transformers>=4.30.0
@@ -14,8 +14,8 @@ scikit-learn>=1.0.0      # For CountVectorizer in BM25Fast
 nltk>=3.8.1              # For PorterStemmer
 rank-bm25>=0.2.2         # For the baseline BM25Okapi
 
-# Vector Search (Dense Retrieval)
-faiss-cpu>=1.7.4         # Change to faiss-gpu if you want GPU-accelerated FAISS
+# Vector Search
+faiss-cpu>=1.7.4         
 pinecone-client>=2.2.2
 
 # Backend API
