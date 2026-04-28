@@ -8,10 +8,26 @@
 [![MLflow](https://img.shields.io/badge/MLflow-Experiment%20Tracking-blue)](https://dagshub.com/aminlasri/Amazon-Search-Engine-Project.mlflow)
 [![Status](https://img.shields.io/badge/Status-Complete-brightgreen)](https://github.com/217amin/amazon-esci-search)
 [![License](https://img.shields.io/badge/License-MIT-lightgrey)](LICENSE)
+[![Live Demo](https://img.shields.io/badge/🤗_Live_Demo-Streamlit-FF4B4B)](https://huggingface.co/spaces/aminlasri/amazon-esci-search-demo)
+[![Live API](https://img.shields.io/badge/🚀_Live_API-Modal-7C3AED)](https://amin-87611--esci-search-fastapi-app.modal.run)
 
 > A production-oriented e-commerce search engine built on the Amazon ESCI dataset.  
 > Combines **Hybrid Retrieval** (Matryoshka Dense + SPLADE + BM25) and **Cross-Encoder Reranking** to maximize relevance (nDCG) while compressing vector storage to 64 dimensions — without sacrificing recall.  
-> Served locally via a **FastAPI** backend and a **Streamlit** frontend.
+> Served via a **FastAPI** backend on Modal and a **Streamlit** frontend on Hugging Face Spaces.
+
+## 🚀 Try it live
+
+- **Streamlit demo (recommended)** → [huggingface.co/spaces/aminlasri/amazon-esci-search-demo](https://huggingface.co/spaces/aminlasri/amazon-esci-search-demo)
+- **Raw API** → [amin-87611--esci-search-fastapi-app.modal.run/docs](https://amin-87611--esci-search-fastapi-app.modal.run/docs)
+
+Try queries like _"wireless gaming mouse"_, _"iphone 13 case shockproof"_, or _"mechanical keyboard brown switches"_.  
+Each result shows which retrievers (BM25 / SPLADE / Dense) found it and at what rank — see the **two-stage retrieval** in action.
+
+![Amazon ESCI demo: a query for "wireless gaming mouse" returns ranked products in ~1 second, with per-result retrieval-signal breakdown showing which retrievers (BM25 / SPLADE / Dense) found each product and at what rank.](docs/esci-demo.gif)
+
+> ⏱️ **Cold start**: First request after idle takes 30–60s (Modal scales to zero when idle). Subsequent requests are ~1 second.
+
+---
 
 ---
 
@@ -299,8 +315,7 @@ curl -X POST http://localhost:8000/api/v1/search \
 
 ## Authors
 
-- **Amin** — [@217amin](https://github.com/217amin)
-- **Asmaa** — [@segmami](https://github.com/segmami)
+- **Amin Lasri** — [@217amin](https://github.com/217amin) · [aminanalyst.com](https://aminanalyst.com)
 
 ---
 
