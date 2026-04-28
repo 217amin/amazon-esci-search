@@ -1,0 +1,44 @@
+# Keep the image small — exclude everything not needed at runtime.
+
+# Data and artifacts (mounted from a volume at runtime)
+data/
+artifacts/
+mlruns/
+results/
+
+# Notebooks
+notebooks/
+*.ipynb
+.ipynb_checkpoints/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+env/
+
+# Editor / IDE
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# Git
+.git/
+.gitignore
+.gitattributes
+
+# Misc
+*.md
+docs/
+streamlit_demo/
+app_ui.py
+build_index.py
+
+# Don't exclude these (small + needed)
+!requirements-serve.txt
+!Dockerfile
